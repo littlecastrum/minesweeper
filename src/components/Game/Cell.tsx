@@ -31,8 +31,8 @@ const useStyles = makeStyles({
 
 interface Props {
   data: CellData;
-  click: () => boolean;
-  rightClick: () => boolean;
+  click: (cell: CellData) => boolean;
+  rightClick: (cell: CellData) => boolean;
 }
 
 const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
@@ -67,7 +67,7 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
   const handleClick = (evt: MouseEvent) => {
     if (isRevealed(cellData)) return;
     const newCell = { ...cellData, state: CellState.REVEALED };
-    const isRunning = click();
+    const isRunning = click(newCell);
     if (isRunning) {
       setCellData(newCell);
     }
@@ -77,7 +77,7 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
     evt.preventDefault();
     if (isRevealed(cellData)) return;
     const newCell = { ...cellData, flagged: !cellData.flagged };
-    const isRunning = rightClick();
+    const isRunning = rightClick(newCell);
     if (isRunning) {
       setCellData(newCell);
     }

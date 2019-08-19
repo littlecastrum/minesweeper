@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import { GameBoard } from '../../typings';
+import { GameBoard, CellData } from '../../typings';
 
 import Cell from './Cell';
 
@@ -18,8 +18,8 @@ const useStyles = makeStyles({
 
 interface Props {
   data: GameBoard;
-  flagging: () => boolean;
-  lookup: () => boolean;
+  flagging: (cell: CellData) => boolean;
+  lookup: (cell: CellData) => boolean;
 }
 
 const Board: FunctionComponent<Props> = ({ data, flagging, lookup }) => {
