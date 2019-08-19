@@ -12,6 +12,22 @@ export function usePrevious(value: any) {
   return ref.current;
 };
 
+export function useInterval(callback: Function, delay: number) {
+  const savedCallback = useRef<Function>();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    const tick = () => savedCallback.current && savedCallback.current();
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+};
+
 export const buildCell = (x: number, y: number): CellData => ({
   coordinates: { x, y },
   state: CellState.HIDDEN,
