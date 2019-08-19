@@ -1,6 +1,8 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container } from '@material-ui/core';
+
+import { Game } from './components';
 
 const useStyles = makeStyles({
   '@global body': {
@@ -13,12 +15,12 @@ const useStyles = makeStyles({
 
 const App: FunctionComponent = () => {
   const classes = useStyles()
-  
+  const [window, setWindow] = useState({ width: 8, height: 8});
+  const [mines, setMines] = useState(8);
+
   return (
     <Container>
-      <div>
-        Ready
-      </div>
+      <Game window={window} mines={mines}/>
     </Container>
   );
 }
