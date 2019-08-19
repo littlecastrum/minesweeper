@@ -1,9 +1,19 @@
 import React, { FunctionComponent, MouseEvent, useState } from 'react';
+import { isEqual } from 'lodash';
 import { makeStyles } from '@material-ui/core';
 
-import { createBoard, isMined, canToggleFlag } from '../../lib/helpers';
+import {
+  createBoard,
+  isMined,
+  isEmpty,
+  canToggleFlag,
+  getMinedCells,
+  getFlaggedCells,
+  getCellsCount,
+  revealEmpty
+} from '../../lib/helpers';
 
-import { GameState, Window, CellData } from '../../typings';
+import { GameState, Window, CellData, CellState } from '../../typings';
 
 import Board from './Board';
 import Header from './Header';
@@ -28,34 +38,77 @@ export const Game: FunctionComponent<Props> = ({ window, mines }) => {
 
   const classes = useStyles();
 
+  const revealBoard = () => {
+    const reveledBoard = board.map((row) => {
+      return row.map((cell) => {
+        cell.state = CellState.REVEALED;
+        return cell;
+      });
+    });
+    setBoard(reveledBoard);
+  }
+
   const lookup = (cell: CellData) => {
-    if (cell.flagged || state !== GameState.RUNNING) return false;
+    if (cell.flagged || state !== GameState.RUNNING) {
+      return false;
+    };
 
     if (isMined(cell)) {
       setState(GameState.ENDED);
+      revealBoard();
       alert('Game Over');
     }
 
     const { x, y } = cell.coordinates;
     board[x][y] = cell;
+    const newBoard = [...board];
+
+    if (isEmpty(cell)) {
+      revealEmpty(cell.coordinates, newBoard, window);
+      setBoard(newBoard);
+    }
+    
+    const hiddenCells = getCellsCount(CellState.HIDDEN, newBoard);
+
+    if (hiddenCells === mines) {
+      setState(GameState.ENDED);
+      revealBoard();
+      alert('You Win 😊');
+    }
 
     return true;
   }
 
   const flagging = (cell: CellData) => {
-    if (state !== GameState.RUNNING || !canToggleFlag(cell, minesCount)) return false; 
+    if (state !== GameState.RUNNING || !(canToggleFlag(cell, minesCount))) return false; 
 
     const { flagged, coordinates: { x, y } } = cell;
 
     board[x][y] = cell;
 
+    const newBoard = [...board];
+
+    let newMines = minesCount;
 
     if (flagged) {
-      setMinesCount(minesCount - 1);
+      newMines--;
     } else {
-      setMinesCount(minesCount + 1);
+      newMines++;
     }
 
+    if (newMines === 0) {
+      const minedCells = getMinedCells(newBoard);
+      const flaggedCells = getFlaggedCells(newBoard);
+
+      if (isEqual(minedCells, flaggedCells)) {
+        setState(GameState.ENDED);
+        revealBoard();
+        alert("You Win");
+      }
+    }
+
+    setMinesCount(newMines);
+    setBoard(newBoard);
     return true;
   }
   

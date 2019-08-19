@@ -55,6 +55,9 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
     if (!isRevealed(cellData)) {
       return cellData.flagged ? "🚩" : null;
     }
+    if (isMined(cellData) && cellData.flagged) {
+      return "❌";
+    }
     if (isMined(cellData)) {
       return "💣";
     }

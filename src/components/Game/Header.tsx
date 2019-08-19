@@ -15,7 +15,7 @@ import Timer, { timerState } from './Timer';
 const useStyles = makeStyles({
   details: {
     marginBottom: '20px',
-    background: '#19a0d9',
+    background: 'cornflowerblue',
     padding: '7px',
     textAlign: 'center',
     color: '#fff',
@@ -46,13 +46,27 @@ const icons = {
 }
 
 const getTimerState = (gameState: GameState): timerState => {
-  if (gameState === GameState.RUNNING) {
-    return 'START';
+  switch (gameState) {
+    case GameState.RUNNING:
+      return 'START';
+    case GameState.LOADING:
+      return 'RESET';
+    default:
+      return 'STOP';
   }
-  if (gameState === GameState.LOADING) {
-    return 'RESET';
+}
+
+const getTimerTooltip = (gameState: GameState): string => {
+  switch (gameState) {
+    case GameState.RUNNING:
+      return 'Pause';
+    case GameState.LOADING:
+      return 'Start';
+    case GameState.ENDED:
+      return 'Restart';
+    default:
+      return 'Resume';
   }
-  return 'STOP';
 }
 
 interface Props {
@@ -68,13 +82,15 @@ const Header: FunctionComponent<Props> = ({ gameState, mines, handleGameState })
       <Timer state={getTimerState(gameState)}/>
       <div className={classes.gameState}>
         <Box component="div">
-          <IconButton onClick={handleGameState}>{icons[gameState]}</IconButton>
+          <Tooltip title={getTimerTooltip(gameState)}>
+            <IconButton onClick={handleGameState}>{icons[gameState]}</IconButton>
+          </Tooltip>
         </Box>
         <Typography>
           {titles[gameState]}
         </Typography>
       </div>
-      <Tooltip title="Mines Counter">
+      <Tooltip title="Flag Counter">
         <Typography>{mines}</Typography>
       </Tooltip>
     </div>

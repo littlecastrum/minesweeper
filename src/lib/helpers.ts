@@ -113,6 +113,46 @@ export const createBoard = (window: Window, mines: number): GameBoard => {
   return setBoard;
 };
 
+
+export const revealEmpty = (coordinates: Point, board: GameBoard, window: Window): GameBoard => {
+  let area = traverseBoard(coordinates, board, window);
+  area.forEach(cell => {
+    if (!cell.flagged && !isRevealed(cell) && (isEmpty(cell) || !isMined(cell))) {
+      board[cell.coordinates.x][cell.coordinates.y].state = CellState.REVEALED;
+      if (isEmpty(cell)) {
+        revealEmpty(cell.coordinates, board, window);
+      }
+    }
+  });
+  return [...board];
+};
+
+export const getCellsCount = (target: CellState | CellContains, board: GameBoard): number => {
+  const hasState = ({ state, contents }: CellData) => target === CellState.HIDDEN ? state !== CellState.REVEALED : contents === target;
+  return board.reduce((acc, row) => {
+    const matches = row.filter((cell) => hasState(cell)).length;
+    return acc + matches;
+  }, 0);
+};
+
+export const getMinedCells = (board: GameBoard): CellData[] => {
+  return board.reduce((acc, row) => {
+    return [
+      ...acc,
+      ...row.filter((cell) => isMined(cell))
+    ];
+  }, []);
+};
+
+export const getFlaggedCells = (board: GameBoard): CellData[] => {
+  return board.reduce((acc, row) => {
+    return [
+      ...acc,
+      ...row.filter((cell) => cell.flagged)
+    ];
+  }, []);
+};
+
 export const canToggleFlag = (cell: CellData, mines: number) => mines > 0 || (mines === 0 && !cell.flagged);
 
 export const isHidden = ({ state }: CellData) => state === CellState.HIDDEN;
