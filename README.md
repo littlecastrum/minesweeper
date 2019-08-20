@@ -53,3 +53,10 @@ to simplify even more the logic
 
 For reduction of complexity the game have 3 levels (Easy, Medium & Hard) which
 are the only options available to players at the moment
+
+## Todo
+- [ ] Functional & e2e Tests
+- [ ] Add AuthO for user validation
+- [ ] Develop API to save games
+- [ ] Create scores of best games
+- [ ] Introduce table of competition between players of the app
