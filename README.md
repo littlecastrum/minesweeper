@@ -50,3 +50,6 @@ enum CellState {
 Since the amount of data saved is very small and there is no security concerns
 `localstorage` was prefered to `IndexDB` for simplicity. A hook was provided 
 to simplify even more the logic
+
+For reduction of complexity the game have 3 levels (Easy, Medium & Hard) which
+are the only options available to players at the moment

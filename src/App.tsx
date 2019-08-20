@@ -1,9 +1,9 @@
-import React, { FunctionComponent, ChangeEvent, useEffect } from 'react';
+import React, { FunctionComponent, ChangeEvent } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Container, Select, OutlinedInput, MenuItem } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { useLocalStorage } from './lib/helpers';
 
-import { Game } from './components';
+import { Game, Selector } from './components';
 
 const useStyles = makeStyles({
   '@global body': {
@@ -30,15 +30,7 @@ const App: FunctionComponent = () => {
 
   return (
     <Container className={classes.root}>
-      <Select
-        value={difficulty}
-        onChange={handleChange}
-        input={<OutlinedInput labelWidth={0} name="difficulty" id="outlined-difficulty-simple" />}
-      >
-        <MenuItem value={8}>Easy</MenuItem>
-        <MenuItem value={16}>Medium</MenuItem>
-        <MenuItem value={32}>Hard</MenuItem>
-      </Select>
+      <Selector label="Difficulty" handleChange={handleChange} value={difficulty} />
       <Game difficulty={difficulty} />
     </Container>
   );

@@ -12,10 +12,9 @@ import {
   getCellsCount,
   revealEmpty,
   useLocalStorage,
-  usePrevious
 } from '../../lib/helpers';
 
-import { GameState, Window, CellData, CellState } from '../../typings';
+import { GameState, CellData, CellState } from '../../typings';
 
 import Board from './Board';
 import Header from './Header';
