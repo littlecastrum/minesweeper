@@ -1,13 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { makeStyles } from '@material-ui/styles';
-
-import { GameBoard, CellData } from '../../typings';
+import { GameBoard, CellData, Window } from '../../typings';
 
 import Cell from './Cell';
 
-const useStyles = makeStyles({
+const setStyles = (window: Window) => makeStyles({
   board: {
-    width: '220px',
+    width: window.width * 32.5,
     margin: '0 auto'
   },
   cell: {
@@ -20,12 +19,14 @@ const useStyles = makeStyles({
 });
 
 interface Props {
+  window: Window
   data: GameBoard;
   flagging: (cell: CellData) => boolean;
   lookup: (cell: CellData) => boolean;
 }
 
-const Board: FunctionComponent<Props> = ({ data, flagging, lookup }) => {
+const Board: FunctionComponent<Props> = ({ window, data, flagging, lookup }) => {
+  const useStyles = setStyles(window);
   const classes = useStyles();
 
   return (

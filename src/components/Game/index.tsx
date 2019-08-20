@@ -1,7 +1,6 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { isEqual } from 'lodash';
 import { makeStyles } from '@material-ui/core';
-import { useIndexedDB } from 'react-indexed-db';
 
 import {
   createBoard,
@@ -11,7 +10,8 @@ import {
   getMinedCells,
   getFlaggedCells,
   getCellsCount,
-  revealEmpty
+  revealEmpty,
+  useLocalStorage
 } from '../../lib/helpers';
 
 import { GameState, Window, CellData, CellState } from '../../typings';
@@ -31,17 +31,14 @@ interface Props {
 }
 
 export const Game: FunctionComponent<Props> = ({ window, mines }) => {
-  const [board, setBoard] = useState(createBoard(window, mines));
-  const [state, setState] = useState(GameState.LOADING);
-  const [minesCount, setMinesCount] = useState(mines);
+  const [board, setBoard] = useLocalStorage('board', createBoard(window, mines));
+  const [state, setState] = useLocalStorage('state', GameState.LOADING);
+  const [minesCount, setMinesCount] = useLocalStorage('minesCount', mines);
+
   const classes = useStyles();
 
-  useEffect(() => {
-    setBoard(createBoard(window, mines))
-  }, [window, mines])
-
   const revealBoard = () => {
-    const reveledBoard = board.map((row) => {
+    const reveledBoard = board.map((row: CellData[]) => {
       return row.map((cell) => {
         cell.state = CellState.REVEALED;
         return cell;
@@ -130,7 +127,7 @@ export const Game: FunctionComponent<Props> = ({ window, mines }) => {
   return (
     <div className={classes.root}>
       <Header gameState={state} mines={minesCount} handleGameState={handleGameState}/>
-      <Board data={board} lookup={lookup} flagging={flagging}/>
+      <Board window={window} data={board} lookup={lookup} flagging={flagging}/>
     </div>
   )
 };

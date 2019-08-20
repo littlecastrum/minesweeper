@@ -7,3 +7,46 @@ To run on development:
   npm install
   npm start
 ```
+## Details
+
+The application is built with React Hooks for simplicity of logic and TypeScript 
+for reliability of types and self documentation
+
+The components structure is divided by the main elements of the Game component:
+- Game
+  - Board
+    - Cell
+  - Header
+    - Timer
+
+The game uses a state based behaviour for keeping the expected functions 
+to fire:
+
+```TypeScript
+enum GameState {
+  LOADING = 'LOADING',
+  RUNNING = 'RUNNING',
+  PAUSED = 'PAUSED',
+  ENDED = 'ENDED',
+}
+```
+
+We use another `enum` to track the cells types to be able to differenciate
+them & another for their state:
+
+```TypeScript
+enum CellContains {
+  MINE = 'MINE',
+  VALUE = 'VALUE',
+  EMPTY = 'EMPTY'
+}
+
+enum CellState {
+  HIDDEN = 'HIDDEN',
+  REVEALED = 'REVEALED'
+}
+```
+
+Since the amount of data saved is very small and there is no security concerns
+`localstorage` was prefered to `IndexDB` for simplicity. A hook was provided 
+to simplify even more the logic

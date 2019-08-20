@@ -1,5 +1,5 @@
 import { CellData, CellState, GameBoard, Point, CellContains, Window } from '../typings';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export function useInterval(callback: Function, delay: number) {
   const savedCallback = useRef<Function>();
@@ -25,6 +25,31 @@ export function usePrevious(value: any) {
   }, [value]);
 
   return ref.current;
+};
+
+export function useLocalStorage<T>(key: string, initialValue: T) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.log(error);
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: T) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      // TODO: Improve error handling
+      console.log(error);
+    }
+  };
+
+  return [storedValue, setValue];
 };
 
 const randomInt = (max: number): number => {

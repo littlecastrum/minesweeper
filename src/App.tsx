@@ -1,6 +1,7 @@
 import React, { FunctionComponent, ChangeEvent, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container } from '@material-ui/core';
+import { useLocalStorage } from './lib/helpers';
 
 import { Game } from './components';
 
@@ -20,8 +21,8 @@ const useStyles = makeStyles({
 
 const App: FunctionComponent = () => {
   const classes = useStyles()
-  const [window, setWindow] = useState({ width: 8, height: 8});
-  const [mines, setMines] = useState(8);
+  const [window, setWindow] = useLocalStorage('window', { width: 8, height: 8});
+  const [mines, setMines] = useLocalStorage('mines', 8);
 
   return (
     <Container className={classes.root}>
