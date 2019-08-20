@@ -14,12 +14,12 @@ import Timer, { timerState } from './Timer';
 
 const useStyles = makeStyles({
   details: {
-    marginBottom: '20px',
+    width: '30%',
+    margin: '20px auto',
     background: 'cornflowerblue',
-    padding: '7px',
     textAlign: 'center',
     color: '#fff',
-    minHeight: '100px',
+    padding: '15px 0',
     borderRadius: '7px',
     display: 'flex',
     justifyContent: 'space-around',

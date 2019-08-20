@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, ChangeEvent, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Container } from '@material-ui/core';
 
@@ -11,6 +11,11 @@ const useStyles = makeStyles({
     fontFamily: 'sans-serif',
     background: '#f4f4f4'
   },
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  }
 });
 
 const App: FunctionComponent = () => {
@@ -19,7 +24,7 @@ const App: FunctionComponent = () => {
   const [mines, setMines] = useState(8);
 
   return (
-    <Container>
+    <Container className={classes.root}>
       <Game window={window} mines={mines}/>
     </Container>
   );

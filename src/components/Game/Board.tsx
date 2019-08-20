@@ -7,8 +7,11 @@ import Cell from './Cell';
 
 const useStyles = makeStyles({
   board: {
-    width: '450px',
-    padding: '0 35px'
+    width: '220px',
+    margin: '0 auto'
+  },
+  cell: {
+    display: 'inline-block'
   },
   clear: {
     clear: 'both',
@@ -24,6 +27,7 @@ interface Props {
 
 const Board: FunctionComponent<Props> = ({ data, flagging, lookup }) => {
   const classes = useStyles();
+
   return (
     <div className={classes.board}>
       {
@@ -32,7 +36,7 @@ const Board: FunctionComponent<Props> = ({ data, flagging, lookup }) => {
             const coords = cell.coordinates
             const cellKey = `${coords.x}::${coords.y}`;
             return (
-              <div key={cellKey}>
+              <div key={cellKey} className={classes.cell}>
                 <Cell click={lookup} rightClick={flagging} data={cell} />
                 {(row[row.length - 1] === cell) ? <div className={classes.clear} /> : ''}
               </div>
