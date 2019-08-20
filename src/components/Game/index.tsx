@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import { makeStyles } from '@material-ui/core';
 
@@ -11,7 +11,8 @@ import {
   getFlaggedCells,
   getCellsCount,
   revealEmpty,
-  useLocalStorage
+  useLocalStorage,
+  usePrevious
 } from '../../lib/helpers';
 
 import { GameState, Window, CellData, CellState } from '../../typings';
@@ -26,14 +27,27 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  window: Window;
-  mines: number
+  difficulty: number
 }
 
-export const Game: FunctionComponent<Props> = ({ window, mines }) => {
+export const Game: FunctionComponent<Props> = ({ difficulty }) => {
+  const [window, setWindow] = useLocalStorage('window', { width: difficulty, height: difficulty });
+  const [mines, setMines] = useLocalStorage('mines', difficulty);
   const [board, setBoard] = useLocalStorage('board', createBoard(window, mines));
   const [state, setState] = useLocalStorage('state', GameState.LOADING);
   const [minesCount, setMinesCount] = useLocalStorage('minesCount', mines);
+
+  useEffect(() => {
+    if (difficulty !== mines) {
+      const newWindow = { width: difficulty, height: difficulty };
+      const newMines = difficulty;
+      setBoard(createBoard(newWindow, newMines))
+      setState(GameState.LOADING)
+      setMinesCount(newMines)
+      setWindow(newWindow)
+      setMines(newMines)
+    }
+  });
 
   const classes = useStyles();
 

@@ -6,7 +6,7 @@ import Cell from './Cell';
 
 const setStyles = (window: Window) => makeStyles({
   board: {
-    width: window.width * 32.5,
+    width: window.width * 42,
     margin: '0 auto'
   },
   cell: {

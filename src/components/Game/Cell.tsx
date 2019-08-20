@@ -9,10 +9,10 @@ const useStyles = makeStyles({
     background: '#7b7b7b',
     border: '1px solid #fff',
     float: 'left',
-    lineHeight: '30px',
-    height: '30px',
+    lineHeight: '40px',
+    height: '40px',
     textAlign: 'center',
-    width: '30px',
+    width: '40px',
     cursor: 'pointer',
     borderRadius: '5px',
     color: '#fff',
@@ -53,7 +53,7 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
   
   const getValue = (cellData: CellData) => {
     if (!isRevealed(cellData)) {
-      return cellData.flagged ? "🚩" : null;
+      return cellData.flagged ? "🏳️" : null;
     }
     if (isMined(cellData) && cellData.flagged) {
       return "❌";
