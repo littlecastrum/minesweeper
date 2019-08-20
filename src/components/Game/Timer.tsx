@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Tooltip, Typography } from '@material-ui/core';
 
-import { useInterval } from '../../lib/helpers';
+import { useInterval, useLocalStorage } from '../../lib/helpers';
 
 export type timerState = 'START' | 'STOP' | 'RESET';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Timer: FunctionComponent<Props> = ({ state }) => {
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useLocalStorage('time', 0);
 
   useInterval(() => {
     if (state === 'START') {
