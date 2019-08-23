@@ -2,17 +2,18 @@ import React, { FunctionComponent, MouseEvent, useState, useEffect } from 'react
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import { isRevealed, isMined, usePrevious } from '../../lib/helpers';
-import { CellData, CellState } from '../../typings';
+import { CellData, CellState, Window } from '../../typings';
+import { Typography } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const setStyles = (window: Window) => makeStyles({
   cell: {
     background: '#7b7b7b',
     border: '1px solid #fff',
     float: 'left',
     lineHeight: '40px',
-    height: '40px',
+    height: 40,
     textAlign: 'center',
-    width: '40px',
+    width: 40,
     cursor: 'pointer',
     borderRadius: '5px',
     color: '#fff',
@@ -31,11 +32,13 @@ const useStyles = makeStyles({
 
 interface Props {
   data: CellData;
+  window: Window  
   click: (cell: CellData) => boolean;
   rightClick: (cell: CellData) => boolean;
 }
 
-const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
+const Cell: FunctionComponent<Props> = ({ data, window, click, rightClick }) => {
+  const useStyles = setStyles(window);
   const classes = useStyles();
   
   const [cellData, setCellData] = useState(data);
@@ -53,7 +56,7 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
   
   const getValue = (cellData: CellData) => {
     if (!isRevealed(cellData)) {
-      return cellData.flagged ? "🏳️" : null;
+      return cellData.flagged ? "🚩" : null;
     }
     if (isMined(cellData) && cellData.flagged) {
       return "❌";
@@ -88,7 +91,7 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
 
   return (
     <div onClick={handleClick} onContextMenu={handleRightClick} className={clsx(classes.cell, warningClass, hiddenClass)}>
-      {getValue(cellData)}
+      <Typography variant="body1">{getValue(cellData)}</Typography>
     </div>
   );
 };

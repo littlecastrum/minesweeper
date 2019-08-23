@@ -12,12 +12,11 @@ import {
   getCellsCount,
   revealEmpty,
   useLocalStorage,
-} from '../../lib/helpers';
+} from '../lib/helpers';
 
-import { GameState, CellData, CellState } from '../../typings';
+import { GameState, CellData, CellState } from '../typings';
 
-import Board from './Board';
-import Header from './Header';
+import { Board, Header } from '.';
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +28,7 @@ interface Props {
   difficulty: number
 }
 
-export const Game: FunctionComponent<Props> = ({ difficulty }) => {
+const Game: FunctionComponent<Props> = ({ difficulty }) => {
   const [window, setWindow] = useLocalStorage('window', { width: difficulty, height: difficulty });
   const [mines, setMines] = useLocalStorage('mines', difficulty);
   const [board, setBoard] = useLocalStorage('board', createBoard(window, mines));
@@ -46,12 +45,6 @@ export const Game: FunctionComponent<Props> = ({ difficulty }) => {
       setWindow(newWindow)
       setMines(newMines)
     }
-    async function getData() {
-      const res = await fetch('/api');
-      const data = await res.json();
-      console.log(data)
-    }
-    getData();
   });
 
   const classes = useStyles();
@@ -150,3 +143,5 @@ export const Game: FunctionComponent<Props> = ({ difficulty }) => {
     </div>
   )
 };
+
+export default Game;

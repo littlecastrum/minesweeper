@@ -23,7 +23,7 @@ const Timer: FunctionComponent<Props> = ({ state }) => {
   return (
     <div>
       <Tooltip title="Timer">
-        <Typography>{time}</Typography>
+        <Typography variant="h4">{time}</Typography>
       </Tooltip>
     </div>
   )

@@ -35,3 +35,18 @@ export type CellData = {
 }
 
 export type GameBoard = CellData[][];
+
+interface GameData {
+  mines: number;
+  window: Window;
+  difficulty: number;
+  minesCount: number;
+  board: GameBoard;
+  state: GameState;
+  time: number;
+  lastSaved: number;
+}
+export interface SessionData {
+  username: string
+  games: GameData[]
+}
