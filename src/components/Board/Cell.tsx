@@ -3,14 +3,13 @@ import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import { isRevealed, isMined, usePrevious } from '../../lib/helpers';
 import { CellData, CellState, Window } from '../../typings';
-import { Typography } from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 
 const setStyles = (window: Window) => makeStyles({
-  cell: {
+  root: {
     background: '#7b7b7b',
     border: '1px solid #fff',
     float: 'left',
-    lineHeight: '40px',
     height: 40,
     textAlign: 'center',
     width: 40,
@@ -21,6 +20,10 @@ const setStyles = (window: Window) => makeStyles({
     '&:focus': {
       outline: 'none',
     }
+  },
+  content: {
+    lineHeight: 0.5,
+    fontSize: 'initial'
   },
   hidden: {
     background: '#2e2829'
@@ -90,9 +93,9 @@ const Cell: FunctionComponent<Props> = ({ data, window, click, rightClick }) => 
   }
 
   return (
-    <div onClick={handleClick} onContextMenu={handleRightClick} className={clsx(classes.cell, warningClass, hiddenClass)}>
-      <Typography variant="body1">{getValue(cellData)}</Typography>
-    </div>
+    <IconButton onClick={handleClick} onContextMenu={handleRightClick} className={clsx(classes.root, warningClass, hiddenClass)}>
+      <Typography variant="inherit" className={classes.content}>{getValue(cellData)}</Typography>
+    </IconButton>
   );
 };
 
