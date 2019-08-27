@@ -1,18 +1,19 @@
 import React, { FunctionComponent, MouseEvent, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { isRevealed, isMined, usePrevious } from '../../lib/helpers';
-import { CellData, CellState } from '../../typings';
+import { isRevealed, isMined } from '../../lib/helpers';
+import { usePrevious } from '../../lib/hooks';
+import { CellData, CellState, Window } from '../../typings';
+import { Typography, IconButton } from '@material-ui/core';
 
-const useStyles = makeStyles({
-  cell: {
+const setStyles = (window: Window) => makeStyles({
+  root: {
     background: '#7b7b7b',
     border: '1px solid #fff',
     float: 'left',
-    lineHeight: '40px',
-    height: '40px',
+    height: 40,
     textAlign: 'center',
-    width: '40px',
+    width: 40,
     cursor: 'pointer',
     borderRadius: '5px',
     color: '#fff',
@@ -20,6 +21,10 @@ const useStyles = makeStyles({
     '&:focus': {
       outline: 'none',
     }
+  },
+  content: {
+    lineHeight: 0.5,
+    fontSize: 'initial'
   },
   hidden: {
     background: '#2e2829'
@@ -31,11 +36,13 @@ const useStyles = makeStyles({
 
 interface Props {
   data: CellData;
+  window: Window  
   click: (cell: CellData) => boolean;
   rightClick: (cell: CellData) => boolean;
 }
 
-const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
+const Cell: FunctionComponent<Props> = ({ data, window, click, rightClick }) => {
+  const useStyles = setStyles(window);
   const classes = useStyles();
   
   const [cellData, setCellData] = useState(data);
@@ -53,7 +60,7 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
   
   const getValue = (cellData: CellData) => {
     if (!isRevealed(cellData)) {
-      return cellData.flagged ? "🏳️" : null;
+      return cellData.flagged ? "🚩" : null;
     }
     if (isMined(cellData) && cellData.flagged) {
       return "❌";
@@ -87,9 +94,9 @@ const Cell: FunctionComponent<Props> = ({ data, click, rightClick }) => {
   }
 
   return (
-    <div onClick={handleClick} onContextMenu={handleRightClick} className={clsx(classes.cell, warningClass, hiddenClass)}>
-      {getValue(cellData)}
-    </div>
+    <IconButton onClick={handleClick} onContextMenu={handleRightClick} className={clsx(classes.root, warningClass, hiddenClass)}>
+      <Typography variant="inherit" className={classes.content}>{getValue(cellData)}</Typography>
+    </IconButton>
   );
 };
 

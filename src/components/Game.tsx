@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { isEqual } from 'lodash';
 import { makeStyles } from '@material-ui/core';
-
+import { useLocalStorage } from '../lib/hooks'
 import {
   createBoard,
   isMined,
@@ -11,17 +11,19 @@ import {
   getFlaggedCells,
   getCellsCount,
   revealEmpty,
-  useLocalStorage,
-} from '../../lib/helpers';
+  revealBoard
+} from '../lib/helpers';
 
-import { GameState, CellData, CellState } from '../../typings';
+import { GameState, CellData, CellState } from '../typings';
 
-import Board from './Board';
-import Header from './Header';
+import { Board, Header, Snackbar } from '.';
 
 const useStyles = makeStyles({
   root: {
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
 })
 
@@ -29,42 +31,27 @@ interface Props {
   difficulty: number
 }
 
-export const Game: FunctionComponent<Props> = ({ difficulty }) => {
+const Game: FunctionComponent<Props> = ({ difficulty }) => {
   const [window, setWindow] = useLocalStorage('window', { width: difficulty, height: difficulty });
   const [mines, setMines] = useLocalStorage('mines', difficulty);
   const [board, setBoard] = useLocalStorage('board', createBoard(window, mines));
   const [state, setState] = useLocalStorage('state', GameState.LOADING);
   const [minesCount, setMinesCount] = useLocalStorage('minesCount', mines);
+  const [isWin, setIsWin] = useState(false);
 
   useEffect(() => {
     if (difficulty !== mines) {
       const newWindow = { width: difficulty, height: difficulty };
       const newMines = difficulty;
-      setBoard(createBoard(newWindow, newMines))
-      setState(GameState.LOADING)
-      setMinesCount(newMines)
-      setWindow(newWindow)
-      setMines(newMines)
+      setBoard(createBoard(newWindow, newMines));
+      setState(GameState.LOADING);
+      setMinesCount(newMines);
+      setWindow(newWindow);
+      setMines(newMines);
     }
-    async function getData() {
-      const res = await fetch('/api');
-      const data = await res.json();
-      console.log(data)
-    }
-    getData();
   });
 
   const classes = useStyles();
-
-  const revealBoard = () => {
-    const reveledBoard = board.map((row: CellData[]) => {
-      return row.map((cell) => {
-        cell.state = CellState.REVEALED;
-        return cell;
-      });
-    });
-    setBoard(reveledBoard);
-  }
 
   const lookup = (cell: CellData) => {
     if (cell.flagged || state !== GameState.RUNNING) {
@@ -73,8 +60,9 @@ export const Game: FunctionComponent<Props> = ({ difficulty }) => {
 
     if (isMined(cell)) {
       setState(GameState.ENDED);
-      revealBoard();
-      alert('Game Over');
+      const revealedBoard = revealBoard(board);
+      setBoard(revealedBoard);
+      return false;
     }
 
     const { x, y } = cell.coordinates;
@@ -90,8 +78,10 @@ export const Game: FunctionComponent<Props> = ({ difficulty }) => {
 
     if (hiddenCells === mines) {
       setState(GameState.ENDED);
-      revealBoard();
-      alert('You Win 😊');
+      const revealedBoard = revealBoard(newBoard);
+      setBoard(revealedBoard);
+      setIsWin(true);
+      return false;
     }
 
     return true;
@@ -120,8 +110,10 @@ export const Game: FunctionComponent<Props> = ({ difficulty }) => {
 
       if (isEqual(minedCells, flaggedCells)) {
         setState(GameState.ENDED);
-        revealBoard();
-        alert("You Win");
+        const revealedBoard = revealBoard(newBoard);
+        setBoard(revealedBoard);
+        setIsWin(true);
+        return false;
       }
     }
 
@@ -143,10 +135,19 @@ export const Game: FunctionComponent<Props> = ({ difficulty }) => {
     return;
   }
 
+  const renderSnackBar = () => {
+    if (state !== GameState.ENDED) return null;
+    if (isWin) return <Snackbar message={'Congratulations! You have won 😊'} variant="success"/>
+    return <Snackbar message={'We are sorry! You have lost 😭'} variant="error"/>
+  }
+
   return (
     <div className={classes.root}>
       <Header gameState={state} mines={minesCount} handleGameState={handleGameState}/>
       <Board window={window} data={board} lookup={lookup} flagging={flagging}/>
+      {renderSnackBar()}
     </div>
   )
 };
+
+export default Game;

@@ -1,19 +1,18 @@
-import React, { FunctionComponent, ChangeEvent } from 'react';
+import React, { FunctionComponent, ChangeEvent, useEffect, useRef } from 'react';
 import { FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    }
-  }),
-);
+const useStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    color: 'white'
+  }
+}));
 
 interface Props {
   handleChange: (event: ChangeEvent<{ value: unknown; }>) => void;
@@ -21,11 +20,12 @@ interface Props {
   label: string;
 }
 
-export const Selector: FunctionComponent<Props> = ({ handleChange, value, label }) => {
+const Selector: FunctionComponent<Props> = ({ handleChange, value, label }) => {
   const classes = useStyles({});
-  const inputLabel = React.useRef<HTMLLabelElement>(null);
+  const inputLabel = useRef<HTMLLabelElement>(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
+
+  useEffect(() => {
     inputLabel.current! && setLabelWidth(inputLabel.current!.offsetWidth);
   }, []);
 
@@ -42,3 +42,5 @@ export const Selector: FunctionComponent<Props> = ({ handleChange, value, label 
     </form>
   );
 };
+
+export default Selector;

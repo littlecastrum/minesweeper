@@ -14,9 +14,9 @@ import Timer, { timerState } from './Timer';
 
 const useStyles = makeStyles({
   details: {
-    width: '30%',
+    width: '50%',
     margin: '20px auto',
-    background: 'cornflowerblue',
+    background: '#2e2829',
     textAlign: 'center',
     color: '#fff',
     padding: '15px 0',
@@ -28,6 +28,9 @@ const useStyles = makeStyles({
   gameState: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  icon: {
+    color: 'white'
   }
 });
 
@@ -83,15 +86,15 @@ const Header: FunctionComponent<Props> = ({ gameState, mines, handleGameState })
       <div className={classes.gameState}>
         <Box component="div">
           <Tooltip title={getTimerTooltip(gameState)}>
-            <IconButton onClick={handleGameState}>{icons[gameState]}</IconButton>
+            <IconButton onClick={handleGameState} className={classes.icon}>{icons[gameState]}</IconButton>
           </Tooltip>
         </Box>
-        <Typography>
+        <Typography variant="h6">
           {titles[gameState]}
         </Typography>
       </div>
       <Tooltip title="Flag Counter">
-        <Typography>{mines}</Typography>
+        <Typography variant="h4">{mines}</Typography>
       </Tooltip>
     </div>
   )

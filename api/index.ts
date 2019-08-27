@@ -9,6 +9,7 @@ export default (req: NowRequest, res: NowResponse) => {
     username: 'littlecastrum',
     games: [
       {
+        id: 1,
         mines,
         window,
         difficulty,
@@ -19,6 +20,7 @@ export default (req: NowRequest, res: NowResponse) => {
         lastSaved: Date.now()
       },
       {
+        id: 2,
         mines,
         window,
         difficulty,
