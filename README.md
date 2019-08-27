@@ -64,7 +64,7 @@ are the only options available to players at the moment
 - [x] Minesweeper game logic
 - [x] Game can be won and lost
 - [x] Game can be started, paused & restarted (After lost)
-- [ ] Game data is persistent in time
+- [x] Game data is persistent in time
 - [ ] Game can be restarted at any time
 - [ ] Functional & e2e Tests
 - [ ] Add AuthO for user validation
