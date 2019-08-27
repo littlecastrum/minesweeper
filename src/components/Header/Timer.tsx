@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Tooltip, Typography } from '@material-ui/core';
 
-import { useInterval, useLocalStorage } from '../../lib/helpers';
+import { useInterval, useLocalStorage } from '../../lib/hooks';
 
 export type timerState = 'START' | 'STOP' | 'RESET';
 

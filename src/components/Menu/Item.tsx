@@ -1,6 +1,6 @@
-import React, { FunctionComponent, MouseEvent as ReactMouseEvt, ReactElement, Fragment, useState } from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemIcon, ListItemText, Popover, Typography } from '@material-ui/core';
+import React, { FunctionComponent, Fragment, ReactElement, useState } from 'react';
+import { withStyles, Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import { ListItem, ListItemIcon, ListItemText, Tooltip } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -10,19 +10,27 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const HtmlTooltip = withStyles((theme: Theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
 interface Props {
   text: string;
-  details?: string;
+  details?: ReactElement;
   icon: ReactElement;
 }
 
 const Item: FunctionComponent<Props> = ({ text, details, icon }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-  const handleClick = (event: ReactMouseEvt<HTMLDivElement, MouseEvent>) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => setOpen(!open);
 
   return (
     <Fragment>
@@ -30,11 +38,10 @@ const Item: FunctionComponent<Props> = ({ text, details, icon }) => {
         <ListItemIcon>
           {icon}
         </ListItemIcon>
-        <ListItemText primary={text} />
+        <HtmlTooltip title={details}>
+          <ListItemText primary={text} />
+        </HtmlTooltip>
       </ListItem>
-      <Popover id={id} onClose={handleClose} anchorEl={anchorEl} open={open}>
-        <Typography>{text}</Typography>
-      </Popover>
     </Fragment>
   )
 }

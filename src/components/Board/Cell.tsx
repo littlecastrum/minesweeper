@@ -1,7 +1,8 @@
 import React, { FunctionComponent, MouseEvent, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import { isRevealed, isMined, usePrevious } from '../../lib/helpers';
+import { isRevealed, isMined } from '../../lib/helpers';
+import { usePrevious } from '../../lib/hooks';
 import { CellData, CellState, Window } from '../../typings';
 import { Typography, IconButton } from '@material-ui/core';
 

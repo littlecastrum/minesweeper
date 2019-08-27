@@ -5,16 +5,13 @@ import { GameBoard, CellData, Window } from '../../typings';
 import Row from './Row';
 
 const setStyles = ({ width }: Window) => {
-  const getWidth = (width: number): number => ({
-    [8 as number]: 375,
-    [16 as number]: 725,
-    [32 as number]: 700
-  }[width]);
-
   return makeStyles({
     board: {
-      width: getWidth(width),
-      margin: '0 auto'
+      width: 'max-content',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      border: 'groove rgba(0,0,0,0.5) 4px'
     }
   });
 };

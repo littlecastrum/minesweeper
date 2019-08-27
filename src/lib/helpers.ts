@@ -1,56 +1,4 @@
 import { CellData, CellState, GameBoard, Point, CellContains, Window } from '../typings';
-import { useState, useEffect, useRef } from 'react';
-
-export function useInterval(callback: Function, delay: number) {
-  const savedCallback = useRef<Function>();
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  useEffect(() => {
-    const tick = () => savedCallback.current && savedCallback.current();
-    if (delay !== null) {
-      const id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-};
-
-export function usePrevious(value: any) {
-  const ref = useRef();
-  
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
-};
-
-export function useLocalStorage<T>(key: string, initialValue: T) {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.log(error);
-      return initialValue;
-    }
-  });
-
-  const setValue = (value: T) => {
-    try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (error) {
-      // TODO: Improve error handling
-      console.log(error);
-    }
-  };
-
-  return [storedValue, setValue];
-};
 
 const randomInt = (max: number): number => {
   return Math.floor((Math.random() * 1000) + 1) % max;
@@ -86,6 +34,16 @@ const traverseBoard = (coordinates: Point, board: GameBoard, window: Window) => 
   }
   return adjacentCells;
 };
+
+export const revealBoard = (board: GameBoard) => {
+  const reveledBoard = board.map((row: CellData[]) => {
+    return row.map((cell) => {
+      cell.state = CellState.REVEALED;
+      return cell;
+    });
+  });
+  return reveledBoard;
+}
 
 const buildCell = (x: number, y: number): CellData => ({
   coordinates: { x, y },
@@ -137,7 +95,6 @@ export const createBoard = (window: Window, mines: number): GameBoard => {
   const setBoard = setCells(minedBoard, window);
   return setBoard;
 };
-
 
 export const revealEmpty = (coordinates: Point, board: GameBoard, window: Window): GameBoard => {
   let area = traverseBoard(coordinates, board, window);

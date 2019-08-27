@@ -1,14 +1,11 @@
-import React, { FunctionComponent, Fragment } from 'react';
+import React, { FunctionComponent, Fragment, memo } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { CellData, Window } from '../../typings';
-
 import Cell from './Cell';
 
 const useStyles = makeStyles({
   row: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: 2
+
   },
   clear: {
     clear: 'both',
@@ -25,6 +22,7 @@ interface RowProps {
 
 const Row: FunctionComponent<RowProps> = ({ data, window, flagging, lookup }) => {
   const classes = useStyles();
+
   return (
     <div className={classes.row}>
       {              
@@ -44,4 +42,4 @@ const Row: FunctionComponent<RowProps> = ({ data, window, flagging, lookup }) =>
   );
 };
 
-export default Row;
+export default memo(Row);

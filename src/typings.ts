@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 export enum GameState {
   LOADING = 'LOADING',
   RUNNING = 'RUNNING',
@@ -36,7 +38,8 @@ export type CellData = {
 
 export type GameBoard = CellData[][];
 
-interface GameData {
+export interface GameData {
+  id: number;
   mines: number;
   window: Window;
   difficulty: number;
@@ -45,6 +48,13 @@ interface GameData {
   state: GameState;
   time: number;
   lastSaved: number;
+}
+
+export interface SavedGameData {
+  id: number;
+  text: string;
+  details: ReactElement;
+  icon: ReactElement
 }
 export interface SessionData {
   username: string

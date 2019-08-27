@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ChangeEvent } from 'react';
+import React, { FunctionComponent, ChangeEvent, useEffect, useRef } from 'react';
 import { FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    color: 'white'
   }
 }));
 
@@ -21,9 +22,10 @@ interface Props {
 
 const Selector: FunctionComponent<Props> = ({ handleChange, value, label }) => {
   const classes = useStyles({});
-  const inputLabel = React.useRef<HTMLLabelElement>(null);
+  const inputLabel = useRef<HTMLLabelElement>(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
+
+  useEffect(() => {
     inputLabel.current! && setLabelWidth(inputLabel.current!.offsetWidth);
   }, []);
 
@@ -34,7 +36,7 @@ const Selector: FunctionComponent<Props> = ({ handleChange, value, label }) => {
         <Select value={value} onChange={handleChange} input={<OutlinedInput labelWidth={labelWidth} name="difficulty" id="outlined-difficulty-simple" />} >
           <MenuItem value={8}>Easy</MenuItem>
           <MenuItem value={16}>Medium</MenuItem>
-          {/* <MenuItem value={32}>Hard</MenuItem> */}
+          <MenuItem value={32}>Hard</MenuItem>
         </Select>
       </FormControl>
     </form>
